@@ -8,4 +8,3 @@ from shared.models import BaseModel
 
 class User(AbstractUser, BaseModel):
     full_name = models.CharField(max_length=255, blank=True, null=True)
-    test = models.IntegerField(default=0)
