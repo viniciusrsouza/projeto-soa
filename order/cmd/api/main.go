@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"net/http"
 
 	"github.com/jackc/pgx/v4/pgxpool"
@@ -48,6 +49,15 @@ func main() {
 	storage := storage.NewOrderStorage(pool)
 	usecase := usecases.NewOrderUseCase(storage)
 
+	// kafkaPublisher := events.NewKafkaPublisher(cfg.KafkaConfig)
+	// err = kafkaPublisher.Start()
+	// if err != nil {
+	// 	logEntry.WithError(err).Fatal("could not start kafka producers")
+	// }
+
+	// producer := producers.New(&kafkaPublisher)
+
+	fmt.Println(err)
 	api := gateways.NewAPI(usecase, logEntry)
 
 	h := api.BuildHandler()

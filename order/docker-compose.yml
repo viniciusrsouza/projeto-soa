@@ -10,9 +10,9 @@ services:
       - 3000:3000
     restart: always
     environment:
-      DATABASE_NAME: pg_db
-      DATABASE_HOST_DIRECT: pg_db
-      HOSTNAME: pg_db
+      DATABASE_NAME: order_pg_db
+      DATABASE_HOST_DIRECT: order_pg_db
+      HOSTNAME: order_pg_db
 
   order_pg_db:
     container_name: order_pg_db
@@ -44,14 +44,25 @@ services:
       - "9092"
     environment:
       KAFKA_CREATE_TOPICS: "domain_orderservice_schedule_approved_0"
-      KAFKA_ADVERTISED_LISTENERS: INSIDE://kafka:9092,OUTSIDE://localhost:9093
+      KAFKA_ADVERTISED_LISTENERS: INSIDE://kafka:9092,OUTSIDE://broker:9093
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INSIDE:PLAINTEXT,OUTSIDE:PLAINTEXT
       KAFKA_LISTENERS: INSIDE://0.0.0.0:9092,OUTSIDE://0.0.0.0:9093
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
       KAFKA_INTER_BROKER_LISTENER_NAME: INSIDE
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: "1"
     restart: always
-    container_name: kafka
+    container_name: broker
+  
+  kafdrop:
+    image: obsidiandynamics/kafdrop
+    restart: "no"
+    ports:
+      - "9000:9000"
+    environment:
+      KAFKA_BROKERCONNECT: "kafka:9092"
+      JVM_OPTS: "-Xms16M -Xmx48M -Xss180K -XX:-TieredCompilation -XX:+UseStringDeduplication -noverify"
+    depends_on:
+      - "kafka"
 
 volumes:
   order_pg_db:
