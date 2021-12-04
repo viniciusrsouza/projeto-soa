@@ -11,4 +11,6 @@ CREATE TABLE IF NOT EXISTS orders (
     updated_at	TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
+CREATE UNIQUE INDEX IF NOT EXISTS idx_orders_ordered_by_schedule_id ON orders(schedule_id, status, ordered_by);
+
 COMMIT;
