@@ -14,9 +14,11 @@ type genericErrResponse struct {
 }
 
 var (
-	errInternalServer = genericErrResponse{Type: "err:internal_server_error", Title: "Internal server error"}
-	errBadRequest     = genericErrResponse{Type: "err:bad_request", Title: "Bad request"}
-	errNotFound       = genericErrResponse{Type: "err:not_found", Title: "Order not found"}
+	errInternalServer      = genericErrResponse{Type: "err:internal_server_error", Title: "Internal server error"}
+	errBadRequest          = genericErrResponse{Type: "err:bad_request", Title: "Bad request"}
+	errNotFound            = genericErrResponse{Type: "err:not_found", Title: "Order not found"}
+	errUnprocessableEntity = genericErrResponse{Type: "err:unprocessable_entity", Title: "Unprocessable entity"}
+	errConflict            = genericErrResponse{Type: "err:conflict", Title: "Conflict"}
 )
 
 type Response struct {
@@ -43,6 +45,15 @@ func ErrorResponse(err error) Response {
 	if errors.Is(err, domain.ErrPropertyOwnerIDNotFound) {
 		return NotFound(err)
 	}
+	if errors.Is(err, domain.ErrOrderApproveRejected) {
+		return UnprocessableEntity(err)
+	}
+	if errors.Is(err, domain.ErrOrderNotFound) {
+		return NotFound(err)
+	}
+	if errors.Is(err, domain.ErrDuplicatedOrderForSchedule) {
+		return Conflict(err)
+	}
 
 	return InternalServerError(err)
 }
@@ -56,10 +67,41 @@ func InternalServerError(err error) Response {
 }
 
 func NotFound(err error) Response {
+	if errors.Is(err, domain.ErrOrderNotFound) {
+		return Response{
+			Error: err,
+			Payload: genericErrResponse{
+				Type:  errNotFound.Type,
+				Title: err.Error(),
+			},
+			Status: http.StatusNotFound,
+		}
+	}
+
 	return Response{
 		Error:   err,
 		Payload: errNotFound,
 		Status:  http.StatusNotFound,
+	}
+}
+
+func UnprocessableEntity(err error) Response {
+	payload := errUnprocessableEntity
+	payload.Title = err.Error()
+	return Response{
+		Error:   err,
+		Payload: payload,
+		Status:  http.StatusUnprocessableEntity,
+	}
+}
+
+func Conflict(err error) Response {
+	payload := errConflict
+	payload.Title = err.Error()
+	return Response{
+		Error:   err,
+		Payload: payload,
+		Status:  http.StatusConflict,
 	}
 }
 

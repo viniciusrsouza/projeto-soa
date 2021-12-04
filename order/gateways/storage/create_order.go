@@ -2,7 +2,10 @@ package storage
 
 import (
 	"context"
+	"errors"
 
+	"github.com/jackc/pgconn"
+	"github.com/jackc/pgerrcode"
 	"github.com/viniciusrsouza/projeto-soa/order/domain"
 )
 
@@ -19,12 +22,19 @@ func (s orderStorage) CreateOrder(ctx context.Context, order *domain.Order) erro
 		returning id, created_at, updated_at;
 	`
 
-	if err := s.QueryRow(ctx, query, order.Status, order.PropertyID, order.OrderedBy, order.PropertyOwnerID, order.ScheduleID).
+	err := s.QueryRow(ctx, query, order.Status, order.PropertyID, order.OrderedBy, order.PropertyOwnerID, order.ScheduleID).
 		Scan(
 			&order.ID,
 			&order.CreatedAt,
 			&order.UpdatedAt,
-		); err != nil {
+		)
+	if err != nil {
+		var pgErr *pgconn.PgError
+		if errors.As(err, &pgErr) {
+			if pgerrcode.IsIntegrityConstraintViolation(pgErr.Code) {
+				return domain.ErrDuplicatedOrderForSchedule
+			}
+		}
 		return err
 	}
 

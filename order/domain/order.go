@@ -27,10 +27,11 @@ const (
 )
 
 var (
-	ErrOrderValidation         = errors.New("invalid order data")
-	ErrOrderApproveRejected    = errors.New("can't approve order")
-	ErrOrderNotFound           = errors.New("order not found")
-	ErrPropertyOwnerIDNotFound = errors.New("no results found for this property_owner_id")
+	ErrOrderValidation            = errors.New("invalid order data")
+	ErrOrderApproveRejected       = errors.New("can't approve order")
+	ErrOrderNotFound              = errors.New("order not found")
+	ErrDuplicatedOrderForSchedule = errors.New("can't create more than one order for a schedule")
+	ErrPropertyOwnerIDNotFound    = errors.New("no results found for this property_owner_id")
 )
 
 type Order struct {
