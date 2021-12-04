@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"fmt"
 	"net/http"
 
 	"github.com/jackc/pgx/v4/pgxpool"
@@ -10,10 +9,13 @@ import (
 	"github.com/viniciusrsouza/projeto-soa/order/config"
 	"github.com/viniciusrsouza/projeto-soa/order/domain/usecases"
 	"github.com/viniciusrsouza/projeto-soa/order/gateways"
+	"github.com/viniciusrsouza/projeto-soa/order/gateways/events"
+	"github.com/viniciusrsouza/projeto-soa/order/gateways/events/producers"
 	"github.com/viniciusrsouza/projeto-soa/order/gateways/storage"
 	"github.com/viniciusrsouza/projeto-soa/order/gateways/storage/postgres"
 )
 
+// TODO remove this weird hard coded address
 const dbURL = "postgres://postgres:postgres@order_pg_db:5432/postgres?sslmode=disable"
 
 func main() {
@@ -46,18 +48,16 @@ func main() {
 
 	logEntry.Info("postgres connected successfully")
 
+	kafkaPublisher := events.NewKafkaPublisher(cfg.KafkaConfig)
+	err = kafkaPublisher.Start()
+	if err != nil {
+		logEntry.WithError(err).Fatal("could not start kafka producers")
+	}
+
 	storage := storage.NewOrderStorage(pool)
-	usecase := usecases.NewOrderUseCase(storage)
+	producer := producers.New(&kafkaPublisher)
 
-	// kafkaPublisher := events.NewKafkaPublisher(cfg.KafkaConfig)
-	// err = kafkaPublisher.Start()
-	// if err != nil {
-	// 	logEntry.WithError(err).Fatal("could not start kafka producers")
-	// }
-
-	// producer := producers.New(&kafkaPublisher)
-
-	fmt.Println(err)
+	usecase := usecases.NewOrderUseCase(storage, producer)
 	api := gateways.NewAPI(usecase, logEntry)
 
 	h := api.BuildHandler()
