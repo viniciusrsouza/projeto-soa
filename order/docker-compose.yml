@@ -1,0 +1,30 @@
+version: '3'
+
+services:
+  api:
+    container_name: order-service
+    depends_on:
+      - "order_pg_db"
+    build: .
+    ports:
+      - 3000:3000
+    restart: always
+    environment:
+      DATABASE_NAME: pg_db
+      DATABASE_HOST_DIRECT: pg_db
+      HOSTNAME: pg_db
+
+  order_pg_db:
+    container_name: order_pg_db
+    image: postgres:13.2-alpine
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: order_pg_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - order_pg_db:/var/lib/postgresql/data
+
+volumes:
+  order_pg_db:
