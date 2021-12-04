@@ -28,6 +28,8 @@ const (
 
 var (
 	ErrOrderValidation         = errors.New("invalid order data")
+	ErrOrderApproveRejected    = errors.New("can't approve order")
+	ErrOrderNotFound           = errors.New("order not found")
 	ErrPropertyOwnerIDNotFound = errors.New("no results found for this property_owner_id")
 )
 
@@ -68,5 +70,18 @@ func (s Order) Validate() error {
 	if s.ScheduleID == 0 {
 		return fmt.Errorf("%w: the schedule_id could not be empty", ErrOrderValidation)
 	}
+	return nil
+}
+
+func (s *Order) Approve() error {
+	if s.Status == ApprovedOrder {
+		return fmt.Errorf("%w: order already approved", ErrOrderApproveRejected)
+	}
+	if s.Status == RejectedOrder {
+		return fmt.Errorf("%w: order already rejected", ErrOrderApproveRejected)
+	}
+
+	s.Status = ApprovedOrder
+
 	return nil
 }

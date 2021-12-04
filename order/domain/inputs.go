@@ -6,3 +6,8 @@ type Create struct {
 	OrderedBy       int
 	ScheduleID      int
 }
+
+type ApproveOrder struct {
+	PropertyOwnerID int
+	ScheduleID      int
+}

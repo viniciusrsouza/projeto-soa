@@ -13,6 +13,8 @@ type orderStorage struct {
 
 type OrderStorage interface {
 	ListOrders(ctx context.Context, propertyOwnerID int, status domain.OrderStatus) ([]domain.Order, error)
+	GetOrderByID(ctx context.Context, orderID, propertyOwnerID int) (domain.Order, error)
+	UpdateOrder(ctx context.Context, order domain.Order) error
 	CreateOrder(ctx context.Context, order *domain.Order) error
 }
 
