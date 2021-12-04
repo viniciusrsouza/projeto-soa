@@ -29,6 +29,7 @@ func (b OrderHandler) CreateOrder(r *http.Request) responses.Response {
 	response := OrderResponse{
 		ID:              order.ID,
 		PropertyID:      order.PropertyID,
+		Status:          order.Status.String(),
 		PropertyOwnerID: order.PropertyOwnerID,
 		OrderedBy:       order.OrderedBy,
 		ScheduleID:      order.ScheduleID,

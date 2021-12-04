@@ -37,6 +37,7 @@ func (b OrderHandler) ListOrders(r *http.Request) responses.Response {
 		formatedOrder := OrderResponse{
 			ID:              order.ID,
 			OrderedBy:       order.OrderedBy,
+			Status:          order.Status.String(),
 			PropertyID:      order.PropertyID,
 			PropertyOwnerID: order.PropertyOwnerID,
 			ScheduleID:      order.ScheduleID,
