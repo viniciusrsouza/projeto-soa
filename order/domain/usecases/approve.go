@@ -7,7 +7,7 @@ import (
 )
 
 func (u useCase) ApproveOrder(ctx context.Context, input domain.ApproveOrder) error {
-	order, err := u.storage.GetOrderByID(ctx, input.ScheduleID, input.PropertyOwnerID)
+	order, err := u.storage.GetOrderByID(ctx, input.OrderID, input.PropertyOwnerID)
 	if err != nil {
 		return err
 	}
@@ -20,7 +20,7 @@ func (u useCase) ApproveOrder(ctx context.Context, input domain.ApproveOrder) er
 		return err
 	}
 
-	err = u.eventPublisher.OrderApproved(ctx, input.ScheduleID, input.PropertyOwnerID, order.OrderedBy)
+	err = u.eventPublisher.OrderApproved(ctx, input.OrderID, input.PropertyOwnerID, order.OrderedBy)
 	if err != nil {
 		return err
 	}

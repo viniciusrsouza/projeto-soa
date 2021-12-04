@@ -9,10 +9,10 @@ type Create struct {
 
 type ApproveOrder struct {
 	PropertyOwnerID int
-	ScheduleID      int
+	OrderID         int
 }
 
 type RejectOrder struct {
 	PropertyOwnerID int
-	ScheduleID      int
+	OrderID         int
 }

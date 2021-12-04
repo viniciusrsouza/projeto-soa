@@ -7,7 +7,7 @@ import (
 )
 
 func (u useCase) RejectOrder(ctx context.Context, input domain.RejectOrder) error {
-	order, err := u.storage.GetOrderByID(ctx, input.ScheduleID, input.PropertyOwnerID)
+	order, err := u.storage.GetOrderByID(ctx, input.OrderID, input.PropertyOwnerID)
 	if err != nil {
 		return err
 	}

@@ -11,7 +11,12 @@ type CreateOrderRequest struct {
 
 type ApproveOrderRequest struct {
 	PropertyOwnerID int `json:"property_owner_id"`
-	ScheduleID      int `json:"schedule_id"`
+	OrderID         int `json:"order_id"`
+}
+
+type RejectOrderRequest struct {
+	PropertyOwnerID int `json:"property_owner_id"`
+	OrderID         int `json:"order_id"`
 }
 
 type OrderResponse struct {
