@@ -11,3 +11,8 @@ type ApproveOrder struct {
 	PropertyOwnerID int
 	ScheduleID      int
 }
+
+type RejectOrder struct {
+	PropertyOwnerID int
+	ScheduleID      int
+}
