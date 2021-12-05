@@ -87,7 +87,7 @@ func (s *Order) Approve() error {
 	return nil
 }
 
-func (s *Order) RejectedOrder() error {
+func (s *Order) Reject() error {
 	if s.Status == ApprovedOrder {
 		return fmt.Errorf("%w: order already approved", ErrOrderApproveRejected)
 	}

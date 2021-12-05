@@ -12,7 +12,7 @@ func (u useCase) RejectOrder(ctx context.Context, input domain.RejectOrder) erro
 		return err
 	}
 
-	if err := order.RejectedOrder(); err != nil {
+	if err := order.Reject(); err != nil {
 		return err
 	}
 
