@@ -25,10 +25,9 @@ func NewOrderHandler(r *mux.Router, usecase domain.OrderUseCase, cfg config.Conf
 
 	orderRouter := r.PathPrefix("/orders").Subrouter()
 
-	// TODO cant buy your own schedule
 	orderRouter.HandleFunc("/{account_id}", middlewares.Authorize(h.CreateOrder, h.log, h.cfg.AuthService)).Methods(http.MethodPost)
-	orderRouter.HandleFunc("/{account_id}/{status}", middlewares.Handle(h.ListOrders, h.log)).Methods(http.MethodGet)
-	orderRouter.HandleFunc("/{account_id}/approve", middlewares.Handle(h.ApproveOrder, h.log)).Methods(http.MethodPost)
-	orderRouter.HandleFunc("/{account_id}/reject", middlewares.Handle(h.RejectOrder, h.log)).Methods(http.MethodPatch)
+	orderRouter.HandleFunc("/{account_id}/{status}", middlewares.Authorize(h.ListOrders, h.log, h.cfg.AuthService)).Methods(http.MethodGet)
+	orderRouter.HandleFunc("/{account_id}/approve", middlewares.Authorize(h.ApproveOrder, h.log, h.cfg.AuthService)).Methods(http.MethodPost)
+	orderRouter.HandleFunc("/{account_id}/reject", middlewares.Authorize(h.RejectOrder, h.log, h.cfg.AuthService)).Methods(http.MethodPatch)
 	return h
 }
