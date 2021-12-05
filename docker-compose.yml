@@ -23,6 +23,7 @@ services:
       DATABASE_NAME: order_pg_db
       DATABASE_HOST_DIRECT: order_pg_db
       HOSTNAME: order_pg_db
+      AUTH_SERVICE_BASE_URL: http://auth:5001
 
   order_pg_db:
     container_name: order_pg_db
