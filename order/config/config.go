@@ -7,7 +7,12 @@ type Config struct {
 	Host        string `envconfig:"HOST" default:"order-service"`
 	Port        string `envconfig:"PORT" default:"3000"`
 	Environment string `envconfig:"ENVIRONMENT" default:"dev"`
+	AuthService AuthService
 	KafkaConfig Kafka
+}
+
+type AuthService struct {
+	BaseURL string `envconfig:"AUTH_SERVICE_BASE_URL" default:"http://0.0.0.0:5001"`
 }
 
 type Kafka struct {

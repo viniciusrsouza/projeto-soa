@@ -58,7 +58,7 @@ func main() {
 	producer := producers.New(&kafkaPublisher)
 
 	usecase := usecases.NewOrderUseCase(storage, producer)
-	api := gateways.NewAPI(usecase, logEntry)
+	api := gateways.NewAPI(usecase, logEntry, *cfg)
 
 	h := api.BuildHandler()
 

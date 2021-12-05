@@ -8,17 +8,19 @@ import (
 	"github.com/viniciusrsouza/projeto-soa/order/domain"
 )
 
-type genericErrResponse struct {
+type GenericErrResponse struct {
 	Title string `json:"title"`
 	Type  string `json:"type"`
 }
 
 var (
-	errInternalServer      = genericErrResponse{Type: "err:internal_server_error", Title: "Internal server error"}
-	errBadRequest          = genericErrResponse{Type: "err:bad_request", Title: "Bad request"}
-	errNotFound            = genericErrResponse{Type: "err:not_found", Title: "Order not found"}
-	errUnprocessableEntity = genericErrResponse{Type: "err:unprocessable_entity", Title: "Unprocessable entity"}
-	errConflict            = genericErrResponse{Type: "err:conflict", Title: "Conflict"}
+	errInternalServer      = GenericErrResponse{Type: "err:internal_server_error", Title: "Internal server error"}
+	errBadRequest          = GenericErrResponse{Type: "err:bad_request", Title: "Bad request"}
+	errNotFound            = GenericErrResponse{Type: "err:not_found", Title: "Order not found"}
+	errUnprocessableEntity = GenericErrResponse{Type: "err:unprocessable_entity", Title: "Unprocessable entity"}
+	errConflict            = GenericErrResponse{Type: "err:conflict", Title: "Conflict"}
+	errUnauthorized        = GenericErrResponse{Type: "err:unauthorized", Title: "Unauthorized"}
+	errForbidden           = GenericErrResponse{Type: "err:forbidden", Title: "Forbidden"}
 )
 
 type Response struct {
@@ -70,7 +72,7 @@ func NotFound(err error) Response {
 	if errors.Is(err, domain.ErrOrderNotFound) {
 		return Response{
 			Error: err,
-			Payload: genericErrResponse{
+			Payload: GenericErrResponse{
 				Type:  errNotFound.Type,
 				Title: err.Error(),
 			},
@@ -119,6 +121,22 @@ func BadRequest(err error) Response {
 	}
 
 	return res
+}
+
+func Unauthorized(err error) Response {
+	return Response{
+		Error:   err,
+		Payload: errUnauthorized,
+		Status:  http.StatusUnauthorized,
+	}
+}
+
+func Forbidden(err error) Response {
+	return Response{
+		Error:   err,
+		Payload: errForbidden,
+		Status:  http.StatusForbidden,
+	}
 }
 
 func Ok(payload interface{}) Response {

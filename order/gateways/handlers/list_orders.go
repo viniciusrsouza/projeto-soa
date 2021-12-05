@@ -11,9 +11,9 @@ import (
 )
 
 func (b OrderHandler) ListOrders(r *http.Request) responses.Response {
-	propertyOwnerID, ok := mux.Vars(r)["property_owner_id"]
+	propertyOwnerID, ok := mux.Vars(r)["account_id"]
 	if !ok {
-		return responses.BadRequest(fmt.Errorf("missing property_owner_id on route params"))
+		return responses.BadRequest(fmt.Errorf("missing account_id on route params"))
 	}
 
 	status, ok := mux.Vars(r)["status"]
@@ -23,7 +23,7 @@ func (b OrderHandler) ListOrders(r *http.Request) responses.Response {
 
 	ownerID, err := strconv.Atoi(propertyOwnerID)
 	if err != nil {
-		return responses.BadRequest(fmt.Errorf("invalid property_owner_id"))
+		return responses.BadRequest(fmt.Errorf("invalid account_id"))
 	}
 
 	orders, err := b.usecase.ListOrders(r.Context(), ownerID, domain.OrderStatus(status))

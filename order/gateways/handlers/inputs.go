@@ -3,20 +3,17 @@ package handlers
 import "time"
 
 type CreateOrderRequest struct {
-	OrderedBy       int `json:"ordered_by"`
 	PropertyID      int `json:"property_id"`
 	PropertyOwnerID int `json:"property_owner_id"`
 	ScheduleID      int `json:"schedule_id"`
 }
 
 type ApproveOrderRequest struct {
-	PropertyOwnerID int `json:"property_owner_id"`
-	OrderID         int `json:"order_id"`
+	OrderID int `json:"order_id"`
 }
 
 type RejectOrderRequest struct {
-	PropertyOwnerID int `json:"property_owner_id"`
-	OrderID         int `json:"order_id"`
+	OrderID int `json:"order_id"`
 }
 
 type OrderResponse struct {
