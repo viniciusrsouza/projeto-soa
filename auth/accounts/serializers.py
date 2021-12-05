@@ -19,12 +19,17 @@ class CreateUserSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError('Passwords do not match')
         return super().validate(attrs)
 
+    def save(self, **kwargs):
+        user = User.objects.create_user(**self.validated_data)
+        return user
+
     class Meta:
         model = User
         fields = ('id', 'full_name', 'username', 'email',
                   'password', 'confirm_password')
         extra_kwargs = {"full_name": {"required": True},
-                        "email": {"required": True}}
+                        "email": {"required": True},
+                        'password': {"write_only": True}}
 
 
 class UpdateUserSerializer(serializers.ModelSerializer):

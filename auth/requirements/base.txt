@@ -17,3 +17,6 @@ django-cors-headers==3.5.0
 
 #JWT
 djangorestframework-simplejwt==5.0.0
+
+#Argon2
+django[argon2]
