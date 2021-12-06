@@ -10,7 +10,7 @@ namespace Properties.EventProcesser.Kafka
         private readonly IConsumer<string, string> _consumer;
         public KafkaConsumer()
         {
-            _consumer = KafkaUtils.CreateConsumer("localhost:9092", new List<string> { "domain_orderservice_schedule_approved_0:2:1" });
+            _consumer = KafkaUtils.CreateConsumer("localhost:9093", new List<string> { "domain_orderservice_schedule_approved_0" });
         }
 
         public string ReadMessage()

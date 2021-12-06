@@ -44,7 +44,7 @@ namespace Properties.Services
                 }
                 else
                 {
-                    await Task.Delay(2000);
+                    await Task.Delay(1000);
                 }
             }
         }

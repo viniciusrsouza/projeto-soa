@@ -10,7 +10,7 @@ namespace Properties.EventProcesser.Kafka
             var config = new ConsumerConfig
             {
                 BootstrapServers = brokerList,
-                GroupId = "appOrder",
+                GroupId = "PropertiesConsumer",
                 // Note: The AutoOffsetReset property determines the start offset in the event
                 // there are not yet any committed offsets for the consumer group for the
                 // topic/partitions of interest. By default, offsets are committed
